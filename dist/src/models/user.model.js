@@ -24,6 +24,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
+const bcrypt = __importStar(require("bcrypt"));
 const UserSchema = new mongoose_1.Schema({
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
@@ -31,4 +32,7 @@ const UserSchema = new mongoose_1.Schema({
 }, {
     timestamps: true
 });
+UserSchema.methods.comparePassword = function (password) {
+    return bcrypt.compareSync(password, this.password);
+};
 exports.default = mongoose_1.default.model('User', UserSchema);

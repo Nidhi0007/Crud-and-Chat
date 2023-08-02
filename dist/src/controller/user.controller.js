@@ -1,4 +1,27 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -8,9 +31,35 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const signup = () => __awaiter(void 0, void 0, void 0, function* () {
+const user_model_1 = __importDefault(require("../models/user.model"));
+const bcrypt = __importStar(require("bcrypt"));
+var jwt = require('jsonwebtoken');
+const signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const data = req.body;
+        const user = new user_model_1.default(data);
+        user.password = bcrypt.hashSync(data.password, 10);
+        const saveUser = user.save();
+        return res.send({ message: "User successfully Created", user: saveUser });
+    }
+    catch (error) {
+        return res.status(401).json(error);
+    }
 });
-const login = () => __awaiter(void 0, void 0, void 0, function* () {
+const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const findUser = yield user_model_1.default.findOne({ email: req.body.email });
+        if (!findUser || !findUser.comparePassword(req.body.password)) {
+            throw new Error('Authentication failed. Invalid email or password.');
+        }
+        return res.json({ token: jwt.sign({ email: findUser.email, password: findUser === null || findUser === void 0 ? void 0 : findUser.password }, { secret: process.env.SECRET }) });
+    }
+    catch (error) {
+        return res.status(401).json({ message: error });
+    }
 });
 exports.default = { signup, login };
