@@ -1,11 +1,18 @@
-import { Request, Response, NextFunction } from "express";
-let Joi = require('joi')
+import { NextFunction, Request, Response } from "express";
 
-const createValidator = (schema: object | Array<object>) =>
-    (payload:any) => {
-        return Joi.validate(payload, schema, {
-            abortEarly: false
-        })
+const validate = (schema: any) => {
+    return (req: Request, res: Response, next: NextFunction) => {
+        const {
+            error
+        } = schema.validate(req.body);
+        if (error) {
+            res.status(422)
+                .send(error.details);
+        } else {
+            next();
+        }
     }
+}
 
-export default  createValidator
+export default
+    validate

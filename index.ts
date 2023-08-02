@@ -1,14 +1,16 @@
 import express, { Express, Request, Response } from 'express';
 import dotenv from 'dotenv';
-import { route } from './src/routes';
+import route from './src/routes';
 import mongoose from 'mongoose';
-
+const bodyparser = require('body-parser');
+require("dotenv").config();
 dotenv.config();
 
 const app: Express = express();
 const port = process.env.PORT;
 const url = process.env.URL!;
-
+app.use(bodyparser.urlencoded({extended:false}));
+app.use(bodyparser.json());
 app.use("/", route)
 
 mongoose.connect(url)

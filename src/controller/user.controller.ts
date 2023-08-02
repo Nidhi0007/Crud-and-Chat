@@ -8,8 +8,8 @@ const signup = async (req: Request, res: Response) => {
         const data: IUser = req.body
         const user = new userModel(data)
         user.password = bcrypt.hashSync(data.password, 10)
-        const saveUser = user.save()
-        return res.send({ message: "User successfully Created", user: saveUser })
+        const saveUser = await user.save()
+        return res.json({ message: "User successfully Created", user: saveUser })
     } catch (error: any) {
         return res.status(401).json(error)
     }
@@ -19,11 +19,12 @@ const login = async (req: Request, res: Response) => {
         const findUser = await userModel.findOne({ email: req.body.email })
         if (!findUser || !findUser.comparePassword(req.body.password)) {
             throw new Error('Authentication failed. Invalid email or password.')
-
         }
-        return res.json({ token: jwt.sign({ email: findUser.email, password: findUser?.password }, { secret: process.env.SECRET }) })
+        let token = jwt.sign({ email: findUser.email, password: findUser?.password }, process.env.SECRET)
+        return res.json({ token: token })
 
     } catch (error: any) {
+        console.log(error)
         return res.status(401).json({ message: error });
     }
 

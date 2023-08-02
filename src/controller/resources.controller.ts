@@ -6,8 +6,8 @@ const addResource = async (req: Request, res: Response) => {
     try {
         const data: IResource = req.body
         const resource = new resourcesModel(data)
-        const saveResource = resource.save()
-        return res.send({ message: "Resource successfully Created", resource: saveResource })
+        const saveResource = await resource.save()
+        return res.json({ message: "Resource successfully Created", resource: saveResource })
     } catch (error) {
         return res.status(401).json({ message: error });
     }
@@ -25,13 +25,10 @@ const updateResource = async (req: Request, res: Response) => {
     try {
         const id = req.params.id
         const data = req.body
-        const updatedResource = await resourcesModel.findOneAndUpdate({ id: id }, {
-            name: data.name,
-            description: data.description
-        }, {
-            new: true
+        await resourcesModel.findOneAndUpdate({ id: id }, {
+           ...data
         })
-        return res.send({ message: "Resource successfully updated", resource: updatedResource })
+        return res.send({ message: "Resource successfully updated" })
     } catch (error) {
         return res.status(401).json({ message: error });
     }
@@ -41,7 +38,6 @@ const updateResource = async (req: Request, res: Response) => {
 const removeResource = async (req: Request, res: Response) => {
     try {
         const id = req.params.id
-
         await resourcesModel.deleteOne({ id: id })
         return res.send({ message: "Resource successfully deleted" })
     } catch (error) {

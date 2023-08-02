@@ -43,8 +43,8 @@ const signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const data = req.body;
         const user = new user_model_1.default(data);
         user.password = bcrypt.hashSync(data.password, 10);
-        const saveUser = user.save();
-        return res.send({ message: "User successfully Created", user: saveUser });
+        const saveUser = yield user.save();
+        return res.json({ message: "User successfully Created", user: saveUser });
     }
     catch (error) {
         return res.status(401).json(error);
@@ -56,9 +56,11 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         if (!findUser || !findUser.comparePassword(req.body.password)) {
             throw new Error('Authentication failed. Invalid email or password.');
         }
-        return res.json({ token: jwt.sign({ email: findUser.email, password: findUser === null || findUser === void 0 ? void 0 : findUser.password }, { secret: process.env.SECRET }) });
+        let token = jwt.sign({ email: findUser.email, password: findUser === null || findUser === void 0 ? void 0 : findUser.password }, process.env.SECRET);
+        return res.json({ token: token });
     }
     catch (error) {
+        console.log(error);
         return res.status(401).json({ message: error });
     }
 });

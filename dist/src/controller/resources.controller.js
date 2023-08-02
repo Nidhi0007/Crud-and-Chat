@@ -17,8 +17,8 @@ const addResource = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     try {
         const data = req.body;
         const resource = new resources_model_1.default(data);
-        const saveResource = resource.save();
-        return res.send({ message: "Resource successfully Created", resource: saveResource });
+        const saveResource = yield resource.save();
+        return res.json({ message: "Resource successfully Created", resource: saveResource });
     }
     catch (error) {
         return res.status(401).json({ message: error });
@@ -37,13 +37,8 @@ const updateResource = (req, res) => __awaiter(void 0, void 0, void 0, function*
     try {
         const id = req.params.id;
         const data = req.body;
-        const updatedResource = yield resources_model_1.default.findOneAndUpdate({ id: id }, {
-            name: data.name,
-            description: data.description
-        }, {
-            new: true
-        });
-        return res.send({ message: "Resource successfully updated", resource: updatedResource });
+        yield resources_model_1.default.findOneAndUpdate({ id: id }, Object.assign({}, data));
+        return res.send({ message: "Resource successfully updated" });
     }
     catch (error) {
         return res.status(401).json({ message: error });
