@@ -4,12 +4,11 @@ import { Button, Form } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-
 import axios from 'axios';
 function Edit() {
 
-    const token=localStorage.getItem('token')
-    const page=localStorage.getItem('page')
+    const token = localStorage.getItem('token')
+    const page = localStorage.getItem('page')
     // Here usestate has been used in order
     // to set and get values from the jsx
     const [name, setname] = useState('');
@@ -23,24 +22,22 @@ function Edit() {
     // Function for handling the edit and 
     // pushing changes of editing/updating
     const handelSubmit = (id) => {
-
-        // let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5pZGhpenNhYW1AZy5jb20iLCJwYXNzd29yZCI6IiQyYiQxMCRjeWVDbi55Ym9aaC5KSFVwOXlHM3hlS21QUUYybEovWFU3UHJTdUtjc1BuZWdCSG43TXAuMiIsImlhdCI6MTY5MTA2Mzg5OH0.aEkWqDnkQROCvORHETVQ3zYNaUAHzCZ23rkyd9IzpJ8"
-        // Prevent reload
         let axiosConfig = {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
         };
-        axios.put(`http://localhost:8000/resources/update-resource/${id}?page=${page}`, {
-            name,
-            description
-
-        }, axiosConfig)
+        axios.put(`http://localhost:8000/resources/update-resource/${id}?page=${page}`, { name, description }, axiosConfig)
             .then(res => {
-                console.log(res.data)
+                history('/home')
+            })
+            .catch(error => {
+                console.log(error)
+                alert(error.response.data)
+
             })
         // // Redirecting to main page
-        history('/')
+
     }
 
 
@@ -54,6 +51,7 @@ function Edit() {
 
     return (
         <div>
+            {!token && <Link to="/login">Login</Link>}
             <Form className="d-grid gap-2"
                 style={{ margin: '15rem' }}>
 
@@ -77,13 +75,13 @@ function Edit() {
                 {/* Hadinling an onclick event 
                     running an edit logic */}
                 <Button
-                    onClick={e => handelSubmit(id)}
-                    variant="primary" type="submit" size="lg">
+                    onClick={(e) => handelSubmit(id)}
+                    variant="primary" size="lg">
                     Update
                 </Button>
 
                 {/* Redirecting to main page after editing */}
-                <Link className="d-grid gap-2" to='/'>
+                <Link className="d-grid gap-2" to='/home'>
                     <Button variant="warning"
                         size="lg">
                         Home

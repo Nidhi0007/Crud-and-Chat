@@ -4,7 +4,7 @@ import Row from 'react-bootstrap/Row';
 import { Button } from 'react-bootstrap'
 import axios from 'axios';
 import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 function Formlogin() {
     const [email, setemail] = useState('');
     const [password, setpassword] = useState('');
@@ -19,13 +19,19 @@ function Formlogin() {
         })
             .then(res => {
                 localStorage.setItem('token', res.data.token);
-                history('/')
+                history('/home')
             })
+            .catch(error => {
+                console.log(error)
+                alert(error.response.data)
+                console.log(error.response.data.error)
+             })
 
 
     }
     return (
         <Form>
+            <h1>Login</h1>
             <Form.Group as={Row} className="mb-3" controlId="formPlaintextEmail">
                 <Form.Label column sm="2" >
                     Email
@@ -45,6 +51,7 @@ function Formlogin() {
             </Form.Group>
 
             <Button variant="primary" onClick={login}>Login</Button>{' '}
+            <Link to="/">Signup</Link>
         </Form>
     );
 }

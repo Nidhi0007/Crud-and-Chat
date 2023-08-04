@@ -3,6 +3,9 @@ import { IUser } from "../interface/user.interface";
 import userModel from "../models/user.model";
 import * as bcrypt from 'bcrypt';
 var jwt = require('jsonwebtoken');
+
+
+// signup function
 const signup = async (req: Request, res: Response) => {
     try {
         const data: IUser = req.body
@@ -11,9 +14,11 @@ const signup = async (req: Request, res: Response) => {
         const saveUser = await user.save()
         return res.json({ message: "User successfully Created", user: saveUser })
     } catch (error: any) {
-        return res.status(401).json(error)
+        return res.status(401).json(error.message)
     }
 }
+
+// login function
 const login = async (req: Request, res: Response) => {
     try {
         const findUser = await userModel.findOne({ email: req.body.email })
@@ -24,7 +29,7 @@ const login = async (req: Request, res: Response) => {
         return res.json({ token: token })
 
     } catch (error: any) {
-        return res.status(401).json({ message: error });
+        return res.status(401).json({ message: error.message });
     }
 
 }

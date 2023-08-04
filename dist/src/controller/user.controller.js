@@ -47,7 +47,7 @@ const signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         return res.json({ message: "User successfully Created", user: saveUser });
     }
     catch (error) {
-        return res.status(401).json(error);
+        return res.status(401).json(error.message);
     }
 });
 const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -60,7 +60,7 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         return res.json({ token: token });
     }
     catch (error) {
-        return res.status(401).json({ message: error });
+        return res.status(401).json({ message: error.message });
     }
 });
 exports.default = { signup, login };

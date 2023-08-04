@@ -7,10 +7,10 @@ import axios from 'axios';
 function Home() {
     const token = localStorage.getItem('token')
     const [array, setarray] = useState([]);
-    const [deletedState, setdeleted] = useState([]);
+    const [deletedState, setdeleted] = useState(false);
     const [total, setTotal] = useState(0);
-    const [current, setCurrent] = useState(0);
-    const [page, setpage] = useState(0);
+    const [current, setCurrent] = useState(1);
+    // const [page, setpage] = useState(0);
 
     // You may skip this part if you're
     // using react-context api or redux
@@ -18,12 +18,12 @@ function Home() {
         localStorage.setItem('id', id);
         localStorage.setItem('description', description);
         localStorage.setItem('name', name);
-        localStorage.setItem('page', page);
+        localStorage.setItem('page', current);
     }
 
     // Deleted function - functionality 
     // for deleting the entry
-    function deleted(id) {
+    function deleted(id, page) {
 
         let axiosConfig = {
             headers: {
@@ -32,9 +32,10 @@ function Home() {
         };
 
 
-        axios.delete(`http://localhost:8000/resources/remove-resource/${id}`, axiosConfig)
+        axios.delete(`http://localhost:8000/resources/remove-resource/${id}?page=${page}`, axiosConfig)
             .then(res => {
                 setdeleted(res.data ? true : false)
+
             })
 
     }
@@ -48,20 +49,26 @@ function Home() {
         };
 
 
-        axios.get(`http://localhost:8000/resources/get-resource?page=${page}`, axiosConfig)
+        axios.get(`http://localhost:8000/resources/get-resource?page=${current}`, axiosConfig)
             .then(res => {
                 setarray(res.data.resources)
                 setTotal(res.data.totalPages)
                 setCurrent(res.data.currentPage)
+                setdeleted(false)
+
+            })
+            .catch(error => {
+                alert(error.response.data)
+                console.log(error.response.data.error)
             })
     }
     useEffect(() => {
         getResources()
-    }, [deletedState, page]);
+    }, [deletedState, current]);
     let items = [];
     for (let number = 1; number <= total; number++) {
         items.push(
-            <Pagination.Item key={number} active={number === current} onClick={() => setpage(number)}>
+            <Pagination.Item key={number} active={number === current}>
                 {number}
             </Pagination.Item>,
         );
@@ -69,6 +76,10 @@ function Home() {
 
     return (
         <div style={{ margin: '10rem' }}>
+
+            <Link to={"/room"}>
+                Chat room
+            </Link>
             <Table striped bordered hover size="sm">
                 <thead>
                     <tr>
@@ -93,14 +104,14 @@ function Home() {
                                     onclick event */}
                                 <td><Link to={`/edit`}>
                                     <Button onClick={(e) =>
-                                        setID(item._id, item.name, item.description, page)}
+                                        setID(item._id, item.name, item.description, current)}
                                         variant="info">
                                         Update</Button></Link>
                                 </td>
 
                                 {/* Using thr deleted function passing
                                     the id of an entry */}
-                                <td><Button onClick={e => deleted(item._id)}
+                                <td><Button onClick={e => deleted(item._id, current)}
                                     variant="danger">Delete</Button></td>
                             </tr>
                         )

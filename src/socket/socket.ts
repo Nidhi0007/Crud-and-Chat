@@ -9,7 +9,7 @@ export default (socket: any) => {
         let user = { room, socket }
         let data = {
             name: room,
-            user: socket.decodedToken.id
+        
         }
         const findRoom = await roomModel.findOne({
             name: room

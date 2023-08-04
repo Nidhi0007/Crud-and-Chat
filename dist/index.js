@@ -24,9 +24,11 @@ const port = process.env.PORT;
 const url = process.env.URL;
 // redis connection
 const redisClient = redis.createClient({
-    host: 'localhost',
-    port: 6379, // Replace with your Redis server port
-    // Add any additional configuration options here if needed
+    password: 'DVPGcTHmAAXMu7l4pixgGBuvdvPw5l1u',
+    socket: {
+        host: 'redis-15435.c239.us-east-1-2.ec2.cloud.redislabs.com',
+        port: 15435
+    }
 });
 exports.redisClient = redisClient;
 redisClient.connect();

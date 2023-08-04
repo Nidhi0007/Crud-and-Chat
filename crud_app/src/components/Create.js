@@ -3,11 +3,11 @@ import React, { useState } from 'react'
 import { Button, Form } from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
-import { v4 as uuid } from 'uuid';
 import { Link, useNavigate } from 'react-router-dom';
 
 function Create() {
     const token=localStorage.getItem('token')
+    const page = localStorage.getItem('page')
     // Making usestate for setting and
     // fetching a value in jsx
     const [name, setname] = useState('');
@@ -26,19 +26,24 @@ function Create() {
         };
 
 
-        await axios.post(`http://localhost:8000/resources/add-resource`, {
+        await axios.post(`http://localhost:8000/resources/add-resource?page=${page}`, {
             name: name,
             description: description
         }, axiosConfig)
             .then(res => {
-                history('/')
+                history('/home')
             })
+            .catch(error => {
+                alert(error.response.data)
+                console.log(error.response.data.error)
+             })
 
         // Redirecting to home page after creation done
     }
 
     return (
         <div >
+                {!token && <Link to="/login">Login</Link>}
             <Form className="d-grid gap-2"
                 style={{ margin: '15rem' }}>
 

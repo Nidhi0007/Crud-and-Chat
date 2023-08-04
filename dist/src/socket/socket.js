@@ -41,7 +41,7 @@ exports.default = (socket) => {
             };
             const messageres = new message_model_1.default(message);
             yield messageres.save();
-            socket.emit("message", ` ${socket.decodedToken.username} has joined the room`);
+            index_1.io.to(room).emit("message", ` ${socket.decodedToken.username} has joined the room`);
         }
     }));
     socket.on("roomMessage", (newMessage, room) => __awaiter(void 0, void 0, void 0, function* () {

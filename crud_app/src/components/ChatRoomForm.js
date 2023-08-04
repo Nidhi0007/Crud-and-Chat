@@ -20,18 +20,22 @@ function ChatRoomForm() {
 
     }, [])
     return (
-        <Form>
-            <Form.Group as={Row} className="mb-3" controlId="formPlaintextEmail">
-                <Form.Label column sm="2">
-                    Room Name
-                </Form.Label>
-                <Col sm="10">
-                    <Form.Control type='text' placeholder='room name' onChange={(e) => setroom(e.target.value)} />
-                </Col>
-            </Form.Group>
+        <>
+            <h1>Add Room Name</h1>
+            <Form>
+                <Form.Group as={Row} className="mb-3" controlId="formPlaintextEmail">
+                    <Form.Label column sm="2">
+                        Room Name
+                    </Form.Label>
+                    <Col sm="10">
+                        <Form.Control type='text' placeholder='room name' onChange={(e) => setroom(e.target.value)} />
+                    </Col>
+                </Form.Group>
 
-            <Button variant="primary" onClick={joinRoom}>Join</Button>{' '}
-        </Form>
+                <Button variant="primary" onClick={joinRoom}>Join</Button>{' '}
+            </Form>
+        </>
+
     );
 }
 

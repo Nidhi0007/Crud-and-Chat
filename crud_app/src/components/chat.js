@@ -26,10 +26,12 @@ const Chat = () => {
 
         return () => {
             socket.off('message'); // Unsubscribe when component unmounts
-          };
+        };
     }, [messages])
     return (
         <div className="chat-container">
+
+            <h1>Chat Screen</h1>
             <div className="message-container">
                 {messages.map((message, index) => (
                     <div key={index} className={`message ${message.sender}`}>

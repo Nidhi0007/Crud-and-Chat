@@ -10,6 +10,7 @@ import Formlogin from './components/Loginform';
 import { socket } from './socket';
 import ChatRoomForm from './components/ChatRoomForm';
 import Chat from './components/chat';
+import { Button } from 'react-bootstrap';
 
 function App() {
   const [isConnected, setIsConnected] = useState(socket.connected);
@@ -39,17 +40,16 @@ function App() {
 
   return (
     <div className='App'>
-
       <Router>
         <Routes>
-          <Route path='/'
+          <Route path='/home'
             element={<Home />} />
           <Route path='/create'
             element={<Create />} />
           <Route path='/edit'
             element={<Edit />} />
 
-          <Route path='/signup'
+          <Route path='/'
             element={<FormSign />} />
 
           <Route path='/login'

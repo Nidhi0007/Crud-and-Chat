@@ -1,6 +1,6 @@
 import { NextFunction ,Response,Request} from "express";
 var jwt = require('jsonwebtoken');
-
+// middleware for socket 
 const jwtAuthMiddleware = async (socket:any, next: NextFunction) => {
     try {
       const secratekey: string = process.env.SECRET as string;

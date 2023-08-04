@@ -4,7 +4,7 @@ import Row from 'react-bootstrap/Row';
 import React, { useState } from 'react'
 import { Button } from 'react-bootstrap'
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 function FormSign() {
     const [email, setemail] = useState('');
     const [password, setpassword] = useState('');
@@ -23,12 +23,18 @@ function FormSign() {
                 console.log(res.data)
                 history('/login')
             })
+            .catch(error => {
+                alert(error.response.data)
+                console.log(error.response.data.error)
+            })
+
         // // Redirecting to main page
 
 
     }
     return (
         <Form>
+            <h1>Sign up</h1>
             <Form.Group as={Row} className="mb-3" controlId="formPlaintextEmail">
                 <Form.Label column sm="2">
                     Email
@@ -54,6 +60,7 @@ function FormSign() {
                 </Col>
             </Form.Group>
             <Button variant="primary" onClick={signup}>Signup</Button>{' '}
+            <Link to="/login">login</Link>
         </Form>
     );
 }

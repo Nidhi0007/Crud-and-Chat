@@ -35,20 +35,24 @@ const getResource = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         let page = Number(req.query.page) ? Number(req.query.page) : 1;
         const cacheKey = `pagination:${page}`;
         let findResources = [];
+        let count = 0;
         let limit = 5;
         let cacheData = yield __1.redisClient.get(cacheKey);
         if (cacheData) {
             const parsedData = JSON.parse(cacheData);
-            findResources = parsedData;
+            findResources = parsedData.findResources;
+            count = parsedData.count;
         }
         else {
             findResources = yield resources_model_1.default.find()
                 .limit(limit * 1)
                 .skip((page - 1) * limit)
                 .exec();
-            __1.redisClient.set(cacheKey, JSON.stringify(findResources));
+            count = yield resources_model_1.default.count();
+            let result = { findResources: [], count: count };
+            result.findResources = findResources;
+            __1.redisClient.set(cacheKey, JSON.stringify(result));
         }
-        const count = yield resources_model_1.default.count();
         return res.send({
             resources: findResources,
             totalPages: Math.ceil(count / limit),
@@ -56,7 +60,7 @@ const getResource = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         });
     }
     catch (error) {
-        return res.status(401).json({ message: error });
+        return res.status(401).json({ message: error.message });
     }
 });
 const updateResource = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -75,8 +79,11 @@ const updateResource = (req, res) => __awaiter(void 0, void 0, void 0, function*
 });
 const removeResource = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        const page = req.query.page;
+        const cacheKey = `pagination:${page}`;
         const id = req.params.id;
-        yield resources_model_1.default.deleteOne({ _id: id });
+        yield resources_model_1.default.findByIdAndDelete(id);
+        yield __1.redisClient.del(cacheKey);
         return res.send({ message: "Resource successfully deleted" });
     }
     catch (error) {

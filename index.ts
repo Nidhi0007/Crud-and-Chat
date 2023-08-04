@@ -17,15 +17,18 @@ dotenv.config();
 
 const app: Express = express();
 app.use(cors());
+
 const port = process.env.PORT;
 const url = process.env.URL!;
 
 
 // redis connection
 const redisClient = redis.createClient({
-  host: 'localhost', // Replace with your Redis server host
-  port: 6379, // Replace with your Redis server port
-  // Add any additional configuration options here if needed
+  password: process.env.REDIS_PASSWORD,
+  socket: {
+    host: process.env.REDIS_HOST,
+    port: 15435
+  }
 });
 redisClient.connect();
 
@@ -34,10 +37,10 @@ redisClient.on('connect', () => {
   console.log('Connected to Redis');
 });
 
-redisClient.on('error', (err:any) => {
+redisClient.on('error', (err: any) => {
   console.error('Error connecting to Redis:', err);
 });
-export {redisClient};
+export { redisClient };
 
 
 app.use(bodyparser.urlencoded({ extended: false }));
@@ -48,18 +51,18 @@ app.use(cors({
 }));
 
 mongoose.connect(url)
-const httpServer=http.createServer(app)
+const httpServer = http.createServer(app)
 
-export const io = new Server(httpServer,{
+export const io = new Server(httpServer, {
   cors: {
     origin: "http://localhost:3000"
   },
 });
 
-io.use((socket, next:any) => {
+io.use((socket, next: any) => {
   jwtAuthMiddleware(socket, next);
 });
 io.on('connection', socket)
-httpServer.listen(port,()=>{
+httpServer.listen(port, () => {
   console.log('Server running!')
 })
