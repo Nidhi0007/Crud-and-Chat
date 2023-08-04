@@ -20,11 +20,10 @@ const login = async (req: Request, res: Response) => {
         if (!findUser || !findUser.comparePassword(req.body.password)) {
             throw new Error('Authentication failed. Invalid email or password.')
         }
-        let token = jwt.sign({ email: findUser.email, password: findUser?.password }, process.env.SECRET)
+        let token = jwt.sign({ username: findUser.username, id: findUser._id, email: findUser.email, password: findUser?.password }, process.env.SECRET)
         return res.json({ token: token })
 
     } catch (error: any) {
-        console.log(error)
         return res.status(401).json({ message: error });
     }
 
