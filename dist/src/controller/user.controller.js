@@ -38,6 +38,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const user_model_1 = __importDefault(require("../models/user.model"));
 const bcrypt = __importStar(require("bcrypt"));
 var jwt = require('jsonwebtoken');
+// signup function
 const signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const data = req.body;
@@ -50,6 +51,7 @@ const signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         return res.status(401).json(error.message);
     }
 });
+// login function
 const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const findUser = yield user_model_1.default.findOne({ email: req.body.email });

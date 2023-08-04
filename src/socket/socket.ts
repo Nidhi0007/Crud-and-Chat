@@ -29,7 +29,7 @@ export default (socket: any) => {
             }
             const messageres = new messageModel(message)
             await messageres.save()
-            io.to(room).emit("message", ` ${socket.decodedToken.username} has joined the room`)
+            socket.to(room).emit("message", ` ${socket.decodedToken.username} has joined the room`)
         }
 
 

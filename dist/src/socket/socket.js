@@ -22,7 +22,6 @@ exports.default = (socket) => {
         let user = { room, socket };
         let data = {
             name: room,
-            user: socket.decodedToken.id
         };
         const findRoom = yield room_model_1.default.findOne({
             name: room
@@ -41,7 +40,7 @@ exports.default = (socket) => {
             };
             const messageres = new message_model_1.default(message);
             yield messageres.save();
-            index_1.io.to(room).emit("message", ` ${socket.decodedToken.username} has joined the room`);
+            socket.to(room).emit("message", ` ${socket.decodedToken.username} has joined the room`);
         }
     }));
     socket.on("roomMessage", (newMessage, room) => __awaiter(void 0, void 0, void 0, function* () {

@@ -24,10 +24,8 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
-const mongodb_1 = require("mongodb");
 const RoomSchema = new mongoose_1.Schema({
     name: { type: String, required: true, unique: true },
-    friends: [{ type: mongodb_1.ObjectId, ref: 'User' }],
 }, {
     timestamps: true
 });

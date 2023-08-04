@@ -4,6 +4,7 @@ import { Button, Table, Pagination } from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { socket } from '../socket';
 function Home() {
     const token = localStorage.getItem('token')
     const [array, setarray] = useState([]);
@@ -64,7 +65,8 @@ function Home() {
     }
     useEffect(() => {
         getResources()
-    }, [deletedState, current]);
+
+    }, []);
     let items = [];
     for (let number = 1; number <= total; number++) {
         items.push(
@@ -77,9 +79,6 @@ function Home() {
     return (
         <div style={{ margin: '10rem' }}>
 
-            <Link to={"/room"}>
-                Chat room
-            </Link>
             <Table striped bordered hover size="sm">
                 <thead>
                     <tr>
@@ -125,6 +124,12 @@ function Home() {
             <Link className="d-grid gap-2" to='/create'>
                 <Button variant="warning" size="lg">Create</Button>
             </Link>
+
+            <div style={{ margin: '4rem' }}>
+                <Link to={"/room"}><Button>
+                    Chat room
+                </Button></Link>
+            </div>
         </div>
     )
 }

@@ -24,10 +24,10 @@ const port = process.env.PORT;
 const url = process.env.URL;
 // redis connection
 const redisClient = redis.createClient({
-    password: 'DVPGcTHmAAXMu7l4pixgGBuvdvPw5l1u',
+    password: process.env.REDIS_PASSWORD,
     socket: {
-        host: 'redis-15435.c239.us-east-1-2.ec2.cloud.redislabs.com',
-        port: 15435
+        host: process.env.REDIS_HOST,
+        port: 18499
     }
 });
 exports.redisClient = redisClient;

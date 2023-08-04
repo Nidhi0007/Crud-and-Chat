@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const resources_model_1 = __importDefault(require("../models/resources.model"));
 const __1 = require("../..");
+//  add resource
 const addResource = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const page = req.query.page;
@@ -30,6 +31,7 @@ const addResource = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         return res.status(401).json({ message: error });
     }
 });
+// get all resource
 const getResource = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let page = Number(req.query.page) ? Number(req.query.page) : 1;
@@ -47,6 +49,7 @@ const getResource = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
             findResources = yield resources_model_1.default.find()
                 .limit(limit * 1)
                 .skip((page - 1) * limit)
+                .sort({ "name": 1 })
                 .exec();
             count = yield resources_model_1.default.count();
             let result = { findResources: [], count: count };
@@ -63,6 +66,7 @@ const getResource = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         return res.status(401).json({ message: error.message });
     }
 });
+// update resource
 const updateResource = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const page = req.query.page;
@@ -71,12 +75,13 @@ const updateResource = (req, res) => __awaiter(void 0, void 0, void 0, function*
         const data = req.body;
         yield resources_model_1.default.findOneAndUpdate({ _id: id }, Object.assign({}, data));
         yield __1.redisClient.del(cacheKey);
-        return res.send({ message: "Resource successfully updated" });
+        return res.json({ message: "Resource successfully updated" });
     }
     catch (error) {
         return res.status(401).json({ message: error });
     }
 });
+//  remove resources
 const removeResource = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const page = req.query.page;
@@ -84,6 +89,12 @@ const removeResource = (req, res) => __awaiter(void 0, void 0, void 0, function*
         const id = req.params.id;
         yield resources_model_1.default.findByIdAndDelete(id);
         yield __1.redisClient.del(cacheKey);
+        const getdata = getResource(req, res);
+        __1.io.emit("resourcesGetSocket", {
+            resources: getdata.resources,
+            totalPages: getdata.totalPages,
+            currentPage: getdata.currentPage,
+        });
         return res.send({ message: "Resource successfully deleted" });
     }
     catch (error) {

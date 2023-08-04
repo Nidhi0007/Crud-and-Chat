@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var jwt = require('jsonwebtoken');
+// auth middleware for protected apis
 const auth = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const secratekey = process.env.SECRET;

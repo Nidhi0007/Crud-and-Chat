@@ -1,7 +1,7 @@
 import { Request, Response } from "express"
 import { IResource } from "../interface/resource.interface"
 import resourcesModel from "../models/resources.model"
-import { redisClient } from "../.."
+import { io, redisClient } from "../.."
 
 //  add resource
 const addResource = async (req: Request, res: Response) => {
@@ -38,12 +38,15 @@ const getResource = async (req: Request, res: Response) => {
             findResources = await resourcesModel.find()
                 .limit(limit * 1)
                 .skip((page - 1) * limit)
+                .sort({ "name": 1 })
                 .exec();
             count = await resourcesModel.count();
             let result = { findResources: [], count: count };
             result.findResources = findResources;
             redisClient.set(cacheKey, JSON.stringify(result));
         }
+
+
         return res.send({
             resources: findResources,
             totalPages: Math.ceil(count / limit),
@@ -66,6 +69,7 @@ const updateResource = async (req: Request, res: Response) => {
             ...data
         })
         await redisClient.del(cacheKey)
+ 
         return res.json({ message: "Resource successfully updated" })
     } catch (error) {
         return res.status(401).json({ message: error });
@@ -80,6 +84,7 @@ const removeResource = async (req: Request, res: Response) => {
         const id = req.params.id
         await resourcesModel.findByIdAndDelete(id)
         await redisClient.del(cacheKey)
+        const getdata: any = getResource(req, res)
         return res.send({ message: "Resource successfully deleted" })
     } catch (error) {
         return res.status(401).json({ message: error });
