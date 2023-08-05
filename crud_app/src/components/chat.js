@@ -13,9 +13,11 @@ const Chat = () => {
   };
 
   const handleSubmit = (event) => {
+    const room = localStorage.getItem("room");
+    console.log(room)
     event.preventDefault();
     if (inputValue.trim() !== "") {
-      socket.emit("roomMessage", inputValue, "nidhi");
+      socket.emit("roomMessage", inputValue, room);
       setInputValue("");
     }
   };
@@ -49,7 +51,9 @@ const Chat = () => {
           placeholder="Type your message..."
         />
         <div>
-          <Button  style={{ margin: "1rem" }} type="submit">Send</Button>
+          <Button style={{ margin: "1rem" }} type="submit">
+            Send
+          </Button>
           <Link to="/room">
             <Button style={{ margin: "1rem" }}>Back</Button>
           </Link>

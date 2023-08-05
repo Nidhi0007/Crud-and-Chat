@@ -28,11 +28,11 @@ const bcrypt = __importStar(require("bcrypt"));
 const UserSchema = new mongoose_1.Schema({
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    username: { type: String, required: true, unique: true }
+    username: { type: String, required: true, unique: true },
 }, {
-    timestamps: true
+    timestamps: true,
 });
 UserSchema.methods.comparePassword = function (password) {
     return bcrypt.compareSync(password, this.password);
 };
-exports.default = mongoose_1.default.model('User', UserSchema);
+exports.default = mongoose_1.default.model("User", UserSchema);

@@ -8,9 +8,11 @@ var jwt = require("jsonwebtoken");
 const signup = async (req: Request, res: Response) => {
   try {
     const data: IUser = req.body;
-    const findUser = await userModel.findOne({ email: req.body.email });
+    const findUser = await userModel.findOne({
+      $or: [{ email: req.body.email }, { username: req.body.username }],
+    });
     if (findUser) {
-      throw new Error("Email address is already registered");
+      throw new Error("Email address or username is already registered");
     }
     const user = new userModel(data);
     user.password = bcrypt.hashSync(data.password, 10);

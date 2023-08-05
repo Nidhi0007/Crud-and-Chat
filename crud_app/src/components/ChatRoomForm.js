@@ -11,7 +11,9 @@ function ChatRoomForm() {
   // Using useNavigation for redirecting to pages
   let history = useNavigate();
   const joinRoom = () => {
+    console.log(room)
     socket.emit("joinChat", room);
+    localStorage.setItem("room", room);
     history("/chat");
   };
   useEffect(() => {

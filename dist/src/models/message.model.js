@@ -27,9 +27,9 @@ const mongoose_1 = __importStar(require("mongoose"));
 const mongodb_1 = require("mongodb");
 const MessageSchema = new mongoose_1.Schema({
     message: { type: String, required: true },
-    roomId: { type: mongodb_1.ObjectId, ref: 'Room' },
-    user: { type: mongodb_1.ObjectId, ref: 'User' }
+    roomId: { type: mongodb_1.ObjectId, ref: "Room" },
+    user: { type: mongodb_1.ObjectId, ref: "User" },
 }, {
-    timestamps: true
+    timestamps: true,
 });
-exports.default = mongoose_1.default.model('Meessages', MessageSchema);
+exports.default = mongoose_1.default.model("Messages", MessageSchema);

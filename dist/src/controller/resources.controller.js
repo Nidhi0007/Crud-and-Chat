@@ -17,6 +17,10 @@ const __1 = require("../..");
 //  add resource
 const addResource = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        const findResource = yield resources_model_1.default.findOne({ name: req.body.name });
+        if (findResource) {
+            throw new Error(`Resource ${req.body.name} is already registered`);
+        }
         const page = req.query.page;
         const cacheKey = `pagination:${page}`;
         const data = req.body;
@@ -25,11 +29,13 @@ const addResource = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         if (saveResource) {
             yield __1.redisClient.del(cacheKey);
         }
-        return res.json({ message: "Resource successfully Created", resource: saveResource });
+        return res.json({
+            message: "Resource successfully Created",
+            resource: saveResource,
+        });
     }
     catch (error) {
-        console.log("error", error);
-        return res.status(401).json({ message: error });
+        return res.status(500).json(error.message);
     }
 });
 // get all resource
@@ -47,24 +53,27 @@ const getResource = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
             count = parsedData.count;
         }
         else {
-            findResources = yield resources_model_1.default.find()
+            findResources = yield resources_model_1.default
+                .find()
                 .limit(limit * 1)
                 .skip((page - 1) * limit)
-                .sort({ "name": 1 })
+                .sort({ name: 1 })
                 .exec();
             count = yield resources_model_1.default.count();
             let result = { findResources: [], count: count };
-            result.findResources = findResources;
-            __1.redisClient.set(cacheKey, JSON.stringify(result));
+            if (findResources.length) {
+                result.findResources = findResources;
+                __1.redisClient.set(cacheKey, JSON.stringify(result));
+            }
         }
         return res.send({
             resources: findResources,
             totalPages: Math.ceil(count / limit),
-            currentPage: page
+            currentPage: page,
         });
     }
     catch (error) {
-        return res.status(401).json({ message: error.message });
+        return res.status(500).json(error.message);
     }
 });
 // update resource
@@ -74,12 +83,16 @@ const updateResource = (req, res) => __awaiter(void 0, void 0, void 0, function*
         const cacheKey = `pagination:${page}`;
         const id = req.params.id;
         const data = req.body;
+        const findResource = yield resources_model_1.default.findOne({ name: req.body.name });
+        if (findResource && findResource.id !== req.params.id) {
+            throw new Error(`Resource ${req.body.name} is already registered`);
+        }
         yield resources_model_1.default.findOneAndUpdate({ _id: id }, Object.assign({}, data));
         yield __1.redisClient.del(cacheKey);
         return res.json({ message: "Resource successfully updated" });
     }
     catch (error) {
-        return res.status(401).json({ message: error });
+        return res.status(500).json(error.message);
     }
 });
 //  remove resources

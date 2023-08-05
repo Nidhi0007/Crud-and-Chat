@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-let Joi = require('joi');
+let Joi = require("joi");
 const userSchema = Joi.object().keys({
     email: Joi.string().email().required(),
     password: Joi.string().min(7).required(),

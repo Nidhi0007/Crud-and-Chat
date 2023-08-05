@@ -42,9 +42,11 @@ var jwt = require("jsonwebtoken");
 const signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const data = req.body;
-        const findUser = yield user_model_1.default.findOne({ email: req.body.email });
+        const findUser = yield user_model_1.default.findOne({
+            $or: [{ email: req.body.email }, { username: req.body.username }],
+        });
         if (findUser) {
-            throw new Error("Email address is already registered");
+            throw new Error("Email address or username is already registered");
         }
         const user = new user_model_1.default(data);
         user.password = bcrypt.hashSync(data.password, 10);

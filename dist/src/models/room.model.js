@@ -27,6 +27,6 @@ const mongoose_1 = __importStar(require("mongoose"));
 const RoomSchema = new mongoose_1.Schema({
     name: { type: String, required: true, unique: true },
 }, {
-    timestamps: true
+    timestamps: true,
 });
-exports.default = mongoose_1.default.model('Room', RoomSchema);
+exports.default = mongoose_1.default.model("Room", RoomSchema);

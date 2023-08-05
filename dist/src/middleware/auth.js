@@ -9,29 +9,26 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var jwt = require('jsonwebtoken');
+var jwt = require("jsonwebtoken");
 // auth middleware for protected apis
 const auth = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const secratekey = process.env.SECRET;
         const token = req.header("Authorization");
         if (!token) {
-            res.status(401)
-                .send("Please Authenticate");
+            res.status(401).send("Please Authenticate");
         }
         else {
             const tokenArray = token.split(" ");
             const decoded = jwt.verify(tokenArray[1], secratekey);
             if (!decoded) {
-                res.status(401)
-                    .send("Please Authenticate");
+                res.status(401).send("Please Authenticate");
             }
             next();
         }
     }
     catch (err) {
-        res.status(401)
-            .send("Please Authenticate");
+        res.status(401).send("Please Authenticate");
     }
 });
 exports.default = auth;

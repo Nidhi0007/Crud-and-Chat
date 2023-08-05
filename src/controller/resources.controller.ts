@@ -6,11 +6,16 @@ import { io, redisClient } from "../..";
 //  add resource
 const addResource = async (req: Request, res: Response) => {
   try {
+    const findResource = await resourcesModel.findOne({ name: req.body.name });
+    if (findResource) {
+      throw new Error(`Resource ${req.body.name} is already registered`);
+    }
     const page = req.query.page;
     const cacheKey = `pagination:${page}`;
     const data: IResource = req.body;
     const resource = new resourcesModel(data);
     const saveResource = await resource.save();
+
     if (saveResource) {
       await redisClient.del(cacheKey);
     }
@@ -18,9 +23,8 @@ const addResource = async (req: Request, res: Response) => {
       message: "Resource successfully Created",
       resource: saveResource,
     });
-  } catch (error) {
-    console.log("error", error);
-    return res.status(401).json({ message: error });
+  } catch (error: any) {
+    return res.status(500).json(error.message);
   }
 };
 
@@ -46,17 +50,18 @@ const getResource = async (req: Request, res: Response) => {
         .exec();
       count = await resourcesModel.count();
       let result = { findResources: [], count: count };
-      result.findResources = findResources;
-      redisClient.set(cacheKey, JSON.stringify(result));
+      if (findResources.length) {
+        result.findResources = findResources;
+        redisClient.set(cacheKey, JSON.stringify(result));
+      }
     }
-
     return res.send({
       resources: findResources,
       totalPages: Math.ceil(count / limit),
       currentPage: page,
     });
   } catch (error: any) {
-    return res.status(401).json({ message: error.message });
+    return res.status(500).json(error.message);
   }
 };
 
@@ -67,6 +72,10 @@ const updateResource = async (req: Request, res: Response) => {
     const cacheKey = `pagination:${page}`;
     const id = req.params.id;
     const data = req.body;
+    const findResource = await resourcesModel.findOne({ name: req.body.name });
+    if (findResource && findResource.id !== req.params.id) {
+      throw new Error(`Resource ${req.body.name} is already registered`);
+    }
     await resourcesModel.findOneAndUpdate(
       { _id: id },
       {
@@ -74,10 +83,9 @@ const updateResource = async (req: Request, res: Response) => {
       }
     );
     await redisClient.del(cacheKey);
-
     return res.json({ message: "Resource successfully updated" });
-  } catch (error) {
-    return res.status(401).json({ message: error });
+  } catch (error: any) {
+    return res.status(500).json(error.message);
   }
 };
 

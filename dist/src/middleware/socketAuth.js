@@ -9,26 +9,26 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var jwt = require('jsonwebtoken');
-// middleware for socket 
+var jwt = require("jsonwebtoken");
+// middleware for socket
 const jwtAuthMiddleware = (socket, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const secratekey = process.env.SECRET;
         const token = socket.handshake.auth.token;
         if (!token) {
-            return next(new Error('Authentication error: Token not provided.'));
+            return next(new Error("Authentication error: Token not provided."));
         }
         else {
             const decoded = jwt.verify(token, secratekey);
             if (!decoded) {
-                return next(new Error('Please Authenticate'));
+                return next(new Error("Please Authenticate"));
             }
             socket.decodedToken = decoded;
             return next();
         }
     }
     catch (err) {
-        return next(new Error('Please Authenticate'));
+        return next(new Error("Please Authenticate"));
     }
 });
 exports.default = jwtAuthMiddleware;

@@ -12,12 +12,18 @@ const socket_io_1 = require("socket.io");
 const http_1 = __importDefault(require("http"));
 const socketAuth_1 = __importDefault(require("./src/middleware/socketAuth"));
 const socket_1 = __importDefault(require("./src/socket/socket"));
-const bodyparser = require('body-parser');
+const bodyparser = require("body-parser");
 const cors = require("cors");
 const redis = require("redis");
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 app.use(cors());
+app.use(bodyparser.urlencoded({ extended: false }));
+app.use(bodyparser.json());
+app.use("/", routes_1.default);
+app.use(cors({
+    origin: "http://localhost:3000/",
+}));
 const port = process.env.PORT;
 const url = process.env.URL;
 // redis connection
@@ -25,35 +31,32 @@ const redisClient = redis.createClient({
     password: process.env.REDIS_PASSWORD,
     socket: {
         host: process.env.REDIS_HOST,
-        port: process.env.REDIS_PORT
-    }
+        port: process.env.REDIS_PORT,
+    },
 });
 exports.redisClient = redisClient;
 redisClient.connect();
 // Handle Redis connection events
-redisClient.on('connect', () => {
-    console.log('Connected to Redis');
+redisClient.on("connect", () => {
+    console.log("Connected to Redis");
 });
-redisClient.on('error', (err) => {
-    console.error('Error connecting to Redis:', err);
+redisClient.on("error", (err) => {
+    console.error("Error connecting to Redis:", err);
 });
-app.use(bodyparser.urlencoded({ extended: false }));
-app.use(bodyparser.json());
-app.use("/", routes_1.default);
-app.use(cors({
-    origin: 'http://localhost:3000/'
-}));
+// redis connection end
+// mongodb connection
 mongoose_1.default.connect(url);
 const httpServer = http_1.default.createServer(app);
+//  socket connection
 exports.io = new socket_io_1.Server(httpServer, {
     cors: {
-        origin: "http://localhost:3000"
+        origin: "http://localhost:3000",
     },
 });
 exports.io.use((socket, next) => {
     (0, socketAuth_1.default)(socket, next);
 });
-exports.io.on('connection', socket_1.default);
+exports.io.on("connection", socket_1.default);
 httpServer.listen(port, () => {
-    console.log('Server running!');
+    console.log("Server running!");
 });

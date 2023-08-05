@@ -18,41 +18,46 @@ const room_model_1 = __importDefault(require("../models/room.model"));
 const users = [];
 exports.default = (socket) => {
     console.log("New connection");
+    // socket to join chat
     socket.on("joinChat", (room) => __awaiter(void 0, void 0, void 0, function* () {
         let user = { room, socket };
         let data = {
             name: room,
         };
         const findRoom = yield room_model_1.default.findOne({
-            name: room
+            name: room,
         });
+        let message = {};
         if (!findRoom) {
             const roomSave = new room_model_1.default(data);
             yield roomSave.save();
+            message.roomId = roomSave._id;
         }
         else {
-            users.push(user);
-            socket.join(room);
-            let message = {
-                message: `${socket.decodedToken.username} has joined the room`,
-                roomId: findRoom._id,
-                user: socket.decodedToken.id
-            };
-            const messageres = new message_model_1.default(message);
-            yield messageres.save();
-            socket.to(room).emit("message", ` ${socket.decodedToken.username} has joined the room`);
+            message.roomId = findRoom._id;
         }
+        users.push(user);
+        socket.join(room);
+        message.message = `${socket.decodedToken.username} has joined the room`;
+        message.user = socket.decodedToken.id;
+        const messageres = new message_model_1.default(message);
+        yield messageres.save();
+        socket
+            .to(room)
+            .emit("message", ` ${socket.decodedToken.username} has joined the room`);
     }));
+    // socket to send message
     socket.on("roomMessage", (newMessage, room) => __awaiter(void 0, void 0, void 0, function* () {
         const findRoom = yield room_model_1.default.findOne({
-            name: room
+            name: room,
         });
         let message = {
             message: newMessage,
             roomId: findRoom === null || findRoom === void 0 ? void 0 : findRoom.id,
-            user: socket.decodedToken.id
+            user: socket.decodedToken.id,
         };
         const messageres = new message_model_1.default(message);
+        console.log(room);
         yield messageres.save();
         index_1.io.to(room).emit("message", `${socket.decodedToken.username}:${newMessage}`);
     }));

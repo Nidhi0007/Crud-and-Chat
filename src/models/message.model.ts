@@ -13,4 +13,4 @@ const MessageSchema: Schema = new Schema(
   }
 );
 
-export default mongoose.model<IUser>("Meessages", MessageSchema);
+export default mongoose.model<IUser>("Messages", MessageSchema);

@@ -15,7 +15,14 @@ dotenv.config();
 
 const app: Express = express();
 app.use(cors());
-
+app.use(bodyparser.urlencoded({ extended: false }));
+app.use(bodyparser.json());
+app.use("/", route);
+app.use(
+  cors({
+    origin: "http://localhost:3000/",
+  })
+);
 const port = process.env.PORT;
 const url = process.env.URL!;
 
@@ -38,19 +45,13 @@ redisClient.on("error", (err: Error) => {
   console.error("Error connecting to Redis:", err);
 });
 export { redisClient };
+// redis connection end
 
-app.use(bodyparser.urlencoded({ extended: false }));
-app.use(bodyparser.json());
-app.use("/", route);
-app.use(
-  cors({
-    origin: "http://localhost:3000/",
-  })
-);
-
+// mongodb connection
 mongoose.connect(url);
 const httpServer = http.createServer(app);
 
+//  socket connection
 export const io = new Server(httpServer, {
   cors: {
     origin: "http://localhost:3000",

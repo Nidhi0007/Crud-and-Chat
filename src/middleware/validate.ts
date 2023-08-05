@@ -1,6 +1,10 @@
 import { NextFunction, Request, Response } from "express";
-
-const validate = (schema: any) => {
+import Joi from "joi";
+interface Schema {
+    validate: (data: any) => { error?: Joi.ValidationError };
+  }
+  
+const validate = (schema: Schema) => {
   return (req: Request, res: Response, next: NextFunction) => {
     const { error } = schema.validate(req.body);
     if (error) {

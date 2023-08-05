@@ -51,13 +51,12 @@ function Edit() {
     return (
         <div>
             {!token && <Link to="/login">Login</Link>}
-            
             <Form className="d-grid gap-2"
-                >
+                style={{ margin: '15rem' }}>
 
                 {/* setting a name from the 
                     input textfiled */}
-                <Form.Group className="m-4"
+                <Form.Group className="m-3"
                     controlId="formBasicEmail">
                     <Form.Control value={name}
                         onChange={e => setname(e.target.value)}
@@ -65,7 +64,7 @@ function Edit() {
                 </Form.Group>
 
                 {/* setting a Description from the input textfiled */}
-                <Form.Group className="m-4"
+                <Form.Group className="m-3"
                     controlId="formBasicPassword">
                     <Form.Control value={description}
                         onChange={e => setdescription(e.target.value)}

@@ -11,7 +11,8 @@ function Home() {
   const [deletedState, setdeleted] = useState(false);
   const [total, setTotal] = useState(0);
   const [current, setCurrent] = useState(1);
-const history=useNavigate()
+  const [pages, setpage] = useState(1);
+  const history = useNavigate();
 
   // You may skip this part if you're
   // using react-context api or redux
@@ -37,7 +38,7 @@ const history=useNavigate()
         axiosConfig
       )
       .then((res) => {
-        setdeleted(res.data ? true : false);
+        setdeleted(!deletedState);
       });
   }
 
@@ -51,26 +52,30 @@ const history=useNavigate()
 
     axios
       .get(
-        `http://localhost:8000/resources/get-resource?page=${current}`,
+        `http://localhost:8000/resources/get-resource?page=${pages}`,
         axiosConfig
       )
       .then((res) => {
         setarray(res.data.resources);
         setTotal(res.data.totalPages);
         setCurrent(res.data.currentPage);
-        setdeleted(false);
       })
       .catch((error) => {
         alert(error.response.data);
       });
   };
   useEffect(() => {
+    console.log(deletedState, pages);
     getResources();
-  }, []);
+  }, [deletedState, pages]);
   let items = [];
   for (let number = 1; number <= total; number++) {
     items.push(
-      <Pagination.Item key={number} active={number === current}>
+      <Pagination.Item
+        key={number}
+        active={number === current}
+        onClick={() => setpage(number)}
+      >
         {number}
       </Pagination.Item>
     );
@@ -81,15 +86,14 @@ const history=useNavigate()
     localStorage.removeItem("description");
     localStorage.removeItem("name");
     localStorage.removeItem("token");
-    history("/login")
-
+    history("/login");
   };
   return (
     <div style={{ margin: "10rem" }}>
-      <div  style={{ marginLeft: "70rem", marginBottom: "10rem"  }}>
+      <div style={{ marginLeft: "70rem", marginBottom: "10rem" }}>
         <Button onClick={logout}>Logout</Button>
       </div>
-
+      <h1>Resource List</h1>
       <Table striped bordered hover size="sm">
         <thead>
           <tr>
@@ -97,10 +101,8 @@ const history=useNavigate()
             <th>Description</th>
           </tr>
         </thead>
+        {/* {!array.length && <thead><h2>No Data</h2></thead>} */}
         <tbody>
-          {/* Mapping though every element 
-                        in the array and showing the 
-                        data in the form of table */}
           {array.map((item) => {
             return (
               <tr>
