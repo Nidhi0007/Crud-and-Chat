@@ -43,10 +43,12 @@ npm run start
 
 ## walk-through video
 [walk-through video Link](https://www.loom.com/share/f691ef393c71408d800fc7231434296b)
+https://www.loom.com/share/f691ef393c71408d800fc7231434296b
 
 ## Code explaination
 
 [Code explaination video link](https://www.loom.com/share/0bbaead091d849ada6e1530ca8cbb901)
+https://www.loom.com/share/0bbaead091d849ada6e1530ca8cbb901
 
 This command will start the project and make it accessible for testing and development.
 **Author:** Nidhi Bhat
