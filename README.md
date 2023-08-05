@@ -41,7 +41,7 @@ npm install
 cd crud_app
 ```
 ```plaintext
-npm intall
+npm install
 ```
 
 
