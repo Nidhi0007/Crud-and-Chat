@@ -1,6 +1,6 @@
 # Project README
 
-Welcome to the README file for the **Project Name** project. This document provides essential information about the project's API documentation, Postman collection, backend database, and Redis cache.
+Welcome to the README file for the **Node Developer Test**. This document provides essential information about the project's API documentation, Postman collection, backend database, and Redis cache.
 
 ## API Documentation
 
@@ -27,11 +27,20 @@ Enhancing performance, the project employs a Redis cache. Here's the link to acc
 
 Use the provided link to establish a connection to the Redis cache and leverage caching capabilities.
 ```plaintext
-redis-18499.c266.us-east-1-3.ec2.cloud.redislabs.com
-```
+redis-cli -h redis-18499.c266.us-east-1-3.ec2.cloud.redislabs.com -p 18499 -a 3BgXNOu6kAbkE4ppwT42UYNrzqNdFe9N
 
+```
 If you have any inquiries or require further assistance pertaining to the project, feel free to reach out.
 
+
+
+## Running the Project
+To run the project, execute the following command:
+```plaintext
+npm run start
+```
+
+This command will start the project and make it accessible for testing and development.
 **Author:** Nidhi Bhat
 **Contact:** bhatnidhis999@gmail.com
 
