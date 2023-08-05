@@ -3,3 +3,4 @@ URL="mongodb+srv://Nidhi:7XWVauyNQYEPzdPM@cluster0.efqllau.mongodb.net/?retryWri
 SECRET=secret
 REDIS_HOST='redis-18499.c266.us-east-1-3.ec2.cloud.redislabs.com'
 REDIS_PORT=18499
+REDIS_PASSWORD='3BgXNOu6kAbkE4ppwT42UYNrzqNdFe9N'
