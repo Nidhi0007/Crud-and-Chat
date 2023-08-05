@@ -14,8 +14,25 @@ The project's API can be conveniently tested using the provided Postman collecti
 
 The project employs a MongoDB cluster as its backend database. Here's the connection link to the MongoDB cluster:
 
-```plaintext
 mongodb+srv://Nidhi:7XWVauyNQYEPzdPM@cluster0.efqllau.mongodb.net/?retryWrites=true&w=majority
 
 To visualize the data stored in the database, you can utilize MongoDB Compass. Paste the provided connection link in MongoDB Compass to connect and inspect the data.
+
+## Redis Cache
+
+Enhancing performance, the project employs a Redis cache. Here's the link to access the Redis cache:
+
+
+Use the provided link to establish a connection to the Redis cache and leverage caching capabilities.
+
+---
+
+If you have any inquiries or require further assistance pertaining to the project, feel free to reach out.
+
+**Author:** Nidhi Bhat
+**Contact:** bhatnidhis999@gmail.com
+
+
+---
+
 
