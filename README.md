@@ -31,7 +31,18 @@ redis-cli -h redis-18499.c266.us-east-1-3.ec2.cloud.redislabs.com -p 18499 -a 3B
 
 ```
 If you have any inquiries or require further assistance pertaining to the project, feel free to reach out.
-
+## To install dependencies of backend
+To install dependencies, execute the following command:
+```plaintext
+npm install
+```
+## To install dependencies of frontend
+```plaintext
+cd crud_app
+```
+```plaintext
+npm intall
+```
 
 
 ## Running the Project

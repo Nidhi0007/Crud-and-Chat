@@ -98,7 +98,6 @@ const removeResource = async (req: Request, res: Response) => {
     const id = req.params.id;
     await resourcesModel.findByIdAndDelete(id);
     await redisClient.del(cacheKey);
-    const getdata: any = getResource(req, res);
     return res.send({ message: "Resource successfully deleted" });
   } catch (error) {
     return res.status(401).json({ message: error });
