@@ -1,4 +1,3 @@
 export interface IRoom {
-    id?: string
-
+  id?: string;
 }

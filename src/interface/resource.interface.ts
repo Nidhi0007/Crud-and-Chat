@@ -1,4 +1,4 @@
-export interface IResource{
-   name:string,
-   description:string
+export interface IResource {
+  name: string;
+  description: string;
 }

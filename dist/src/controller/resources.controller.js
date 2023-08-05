@@ -28,6 +28,7 @@ const addResource = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         return res.json({ message: "Resource successfully Created", resource: saveResource });
     }
     catch (error) {
+        console.log("error", error);
         return res.status(401).json({ message: error });
     }
 });

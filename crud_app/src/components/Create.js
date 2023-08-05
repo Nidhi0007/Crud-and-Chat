@@ -24,8 +24,6 @@ function Create() {
                 'Authorization': `Bearer ${token}`
             }
         };
-
-
         await axios.post(`http://localhost:8000/resources/add-resource?page=${page}`, {
             name: name,
             description: description
@@ -35,7 +33,6 @@ function Create() {
             })
             .catch(error => {
                 alert(error.response.data)
-                console.log(error.response.data.error)
              })
 
         // Redirecting to home page after creation done

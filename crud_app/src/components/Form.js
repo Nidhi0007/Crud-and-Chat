@@ -33,7 +33,7 @@ function FormSign() {
 
     }
     return (
-        <Form>
+        <Form style={{ margin: "7rem" }}>
             <h1>Sign up</h1>
             <Form.Group as={Row} className="mb-3" controlId="formPlaintextEmail">
                 <Form.Label column sm="2">

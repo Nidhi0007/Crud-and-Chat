@@ -12,8 +12,6 @@ const socket_io_1 = require("socket.io");
 const http_1 = __importDefault(require("http"));
 const socketAuth_1 = __importDefault(require("./src/middleware/socketAuth"));
 const socket_1 = __importDefault(require("./src/socket/socket"));
-const socketio = require('socket.io');
-const path = require('path');
 const bodyparser = require('body-parser');
 const cors = require("cors");
 const redis = require("redis");
@@ -27,7 +25,7 @@ const redisClient = redis.createClient({
     password: process.env.REDIS_PASSWORD,
     socket: {
         host: process.env.REDIS_HOST,
-        port: 18499
+        port: process.env.REDIS_PORT
     }
 });
 exports.redisClient = redisClient;

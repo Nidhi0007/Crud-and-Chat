@@ -32,7 +32,6 @@ function Edit() {
                 history('/home')
             })
             .catch(error => {
-                console.log(error)
                 alert(error.response.data)
 
             })
@@ -52,24 +51,25 @@ function Edit() {
     return (
         <div>
             {!token && <Link to="/login">Login</Link>}
+            
             <Form className="d-grid gap-2"
-                style={{ margin: '15rem' }}>
+                >
 
                 {/* setting a name from the 
                     input textfiled */}
-                <Form.Group className="mb-3"
+                <Form.Group className="m-4"
                     controlId="formBasicEmail">
                     <Form.Control value={name}
                         onChange={e => setname(e.target.value)}
                         type="text" placeholder="Enter Name" />
                 </Form.Group>
 
-                {/* setting a age from the input textfiled */}
-                <Form.Group className="mb-3"
+                {/* setting a Description from the input textfiled */}
+                <Form.Group className="m-4"
                     controlId="formBasicPassword">
                     <Form.Control value={description}
                         onChange={e => setdescription(e.target.value)}
-                        type="text" placeholder="Age" />
+                        type="text" placeholder="Description" />
                 </Form.Group>
 
                 {/* Hadinling an onclick event 

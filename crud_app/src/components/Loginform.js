@@ -25,12 +25,12 @@ function Formlogin() {
                 console.log(error)
                 alert(error.response.data)
                 console.log(error.response.data.error)
-             })
+            })
 
 
     }
     return (
-        <Form>
+        <Form style={{ margin: "7rem" }}>
             <h1>Login</h1>
             <Form.Group as={Row} className="mb-3" controlId="formPlaintextEmail">
                 <Form.Label column sm="2" >

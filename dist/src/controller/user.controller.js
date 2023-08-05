@@ -37,11 +37,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const user_model_1 = __importDefault(require("../models/user.model"));
 const bcrypt = __importStar(require("bcrypt"));
-var jwt = require('jsonwebtoken');
+var jwt = require("jsonwebtoken");
 // signup function
 const signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const data = req.body;
+        const findUser = yield user_model_1.default.findOne({ email: req.body.email });
+        if (findUser) {
+            throw new Error("Email address is already registered");
+        }
         const user = new user_model_1.default(data);
         user.password = bcrypt.hashSync(data.password, 10);
         const saveUser = yield user.save();
@@ -56,13 +60,18 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const findUser = yield user_model_1.default.findOne({ email: req.body.email });
         if (!findUser || !findUser.comparePassword(req.body.password)) {
-            throw new Error('Invalid email or password.');
+            throw new Error("Invalid email or password.");
         }
-        let token = jwt.sign({ username: findUser.username, id: findUser._id, email: findUser.email, password: findUser === null || findUser === void 0 ? void 0 : findUser.password }, process.env.SECRET);
+        let token = jwt.sign({
+            username: findUser.username,
+            id: findUser._id,
+            email: findUser.email,
+            password: findUser === null || findUser === void 0 ? void 0 : findUser.password,
+        }, process.env.SECRET);
         return res.json({ token: token });
     }
     catch (error) {
-        return res.status(401).json({ message: error.message });
+        return res.status(401).json(error.message);
     }
 });
 exports.default = { signup, login };
