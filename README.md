@@ -16,3 +16,6 @@ The project employs a MongoDB cluster as its backend database. Here's the connec
 
 ```plaintext
 mongodb+srv://Nidhi:7XWVauyNQYEPzdPM@cluster0.efqllau.mongodb.net/?retryWrites=true&w=majority
+
+To visualize the data stored in the database, you can utilize MongoDB Compass. Paste the provided connection link in MongoDB Compass to connect and inspect the data.
+
