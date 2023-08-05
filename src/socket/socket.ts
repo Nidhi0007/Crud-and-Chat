@@ -46,7 +46,6 @@ export default (socket: any) => {
       user: socket.decodedToken.id,
     };
     const messageres = new messageModel(message);
-    console.log(room);
     await messageres.save();
     io.to(room).emit(
       "message",
