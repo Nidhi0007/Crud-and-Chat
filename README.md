@@ -24,10 +24,7 @@ Enhancing performance, the project employs a Redis cache. Here's the link to acc
 
 
 Use the provided link to establish a connection to the Redis cache and leverage caching capabilities.
-
-
 redis-18499.c266.us-east-1-3.ec2.cloud.redislabs.com
----
 
 If you have any inquiries or require further assistance pertaining to the project, feel free to reach out.
 
