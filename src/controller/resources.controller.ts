@@ -51,6 +51,7 @@ const getResource = async (req: Request, res: Response) => {
       count = await resourcesModel.count();
       let result = { findResources: [], count: count };
       if (findResources.length) {
+        result.count = count;
         result.findResources = findResources;
         redisClient.set(cacheKey, JSON.stringify(result));
       }

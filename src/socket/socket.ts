@@ -23,6 +23,7 @@ export default (socket: any) => {
     } else {
       message.roomId = findRoom._id;
     }
+    console.log(message)
     users.push(user);
     socket.join(room);
 

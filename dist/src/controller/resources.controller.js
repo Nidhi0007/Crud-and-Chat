@@ -62,6 +62,7 @@ const getResource = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
             count = yield resources_model_1.default.count();
             let result = { findResources: [], count: count };
             if (findResources.length) {
+                result.count = count;
                 result.findResources = findResources;
                 __1.redisClient.set(cacheKey, JSON.stringify(result));
             }

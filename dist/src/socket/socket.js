@@ -36,6 +36,7 @@ exports.default = (socket) => {
         else {
             message.roomId = findRoom._id;
         }
+        console.log(message);
         users.push(user);
         socket.join(room);
         message.message = `${socket.decodedToken.username} has joined the room`;
@@ -57,7 +58,6 @@ exports.default = (socket) => {
             user: socket.decodedToken.id,
         };
         const messageres = new message_model_1.default(message);
-        console.log(room);
         yield messageres.save();
         index_1.io.to(room).emit("message", `${socket.decodedToken.username}:${newMessage}`);
     }));
