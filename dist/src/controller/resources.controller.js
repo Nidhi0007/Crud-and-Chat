@@ -90,11 +90,6 @@ const removeResource = (req, res) => __awaiter(void 0, void 0, void 0, function*
         yield resources_model_1.default.findByIdAndDelete(id);
         yield __1.redisClient.del(cacheKey);
         const getdata = getResource(req, res);
-        __1.io.emit("resourcesGetSocket", {
-            resources: getdata.resources,
-            totalPages: getdata.totalPages,
-            currentPage: getdata.currentPage,
-        });
         return res.send({ message: "Resource successfully deleted" });
     }
     catch (error) {

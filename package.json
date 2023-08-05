@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "build": "npx tsc",
-    "start": "node dist/index.js",
+    "backend": "tsc && node dist/index.js",
     "frontend": "cd crud_app && npm start",
-    "dev": "concurrently \"npm run frontend\" \"npm run start\""
+    "start": "concurrently \"npm run frontend\" \"npm run backend\""
   },
   "repository": {
     "type": "git",

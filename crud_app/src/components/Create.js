@@ -76,7 +76,7 @@ function Create() {
                 </Button>
 
                 {/* Redirecting back to home page */}
-                <Link className="d-grid gap-2" to='/'>
+                <Link className="d-grid gap-2" to='/home'>
                     <Button variant="info" size="lg">
                         Home
                     </Button>

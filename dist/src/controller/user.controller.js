@@ -56,7 +56,7 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const findUser = yield user_model_1.default.findOne({ email: req.body.email });
         if (!findUser || !findUser.comparePassword(req.body.password)) {
-            throw new Error('Authentication failed. Invalid email or password.');
+            throw new Error('Invalid email or password.');
         }
         let token = jwt.sign({ username: findUser.username, id: findUser._id, email: findUser.email, password: findUser === null || findUser === void 0 ? void 0 : findUser.password }, process.env.SECRET);
         return res.json({ token: token });

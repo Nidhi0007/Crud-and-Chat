@@ -23,7 +23,7 @@ const login = async (req: Request, res: Response) => {
     try {
         const findUser = await userModel.findOne({ email: req.body.email })
         if (!findUser || !findUser.comparePassword(req.body.password)) {
-            throw new Error('Authentication failed. Invalid email or password.')
+            throw new Error('Invalid email or password.')
         }
         let token = jwt.sign({ username: findUser.username, id: findUser._id, email: findUser.email, password: findUser?.password }, process.env.SECRET)
         return res.json({ token: token })
